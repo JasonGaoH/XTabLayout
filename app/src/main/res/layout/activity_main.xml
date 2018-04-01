@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+  <android.support.design.widget.TabLayout
+      android:id="@+id/tabsOne"
+      app:tabMode="scrollable"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"/>
+
+  <android.support.design.widget.TabLayout
+      android:id="@+id/tabsTwo"
+      app:tabMode="scrollable"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"/>
+
+  <android.support.design.widget.TabLayout
+      android:id="@+id/tabsThree"
+      app:tabMode="fixed"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"/>
+
+  <com.gaohui.xtablayout.widgets.XTabLayout
+      android:id="@+id/tabsFour"
+      app:tabMode="scrollable"
+      app:xy_tabIndicatorWidth="35dp"
+      app:xy_tabIndicatorHeight="1.5dp"
+      app:xy_tabIndicatorColor="#ff0000"
+      app:xy_tabTextColor="#999999"
+      app:xy_tabSelectedTextColor="#333333"
+      android:layout_width="match_parent"
+      android:layout_height="45dp"/>
+
+  <android.support.v4.view.ViewPager
+      android:id="@+id/viewPager"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"/>
+
+
+</LinearLayout>
