@@ -226,27 +226,27 @@ public class XTabLayout extends HorizontalScrollView {
                 LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT));
 
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.XTabLayout,
-                defStyleAttr, R.style.Widget_Design_TabLayout);
+                defStyleAttr, R.style.XTabLayout_Default_Style);
 
         mTabStrip.setSelectedIndicatorHeight(
-                a.getDimensionPixelSize(R.styleable.XTabLayout_xy_tabIndicatorHeight, 0));
+                a.getDimensionPixelSize(R.styleable.XTabLayout_x_tabIndicatorHeight, 0));
         // default value was 28dp
         mTabStrip.setSelectedIndicatorWidth(
-                a.getDimensionPixelSize(R.styleable.XTabLayout_xy_tabIndicatorWidth, dpToPx(28)));
-        mTabStrip.setSelectedIndicatorColor(a.getColor(R.styleable.XTabLayout_xy_tabIndicatorColor, 0));
+                a.getDimensionPixelSize(R.styleable.XTabLayout_x_tabIndicatorWidth, dpToPx(28)));
+        mTabStrip.setSelectedIndicatorColor(a.getColor(R.styleable.XTabLayout_x_tabIndicatorColor, 0));
 
         mTabPaddingStart = mTabPaddingTop = mTabPaddingEnd = mTabPaddingBottom = a
-                .getDimensionPixelSize(R.styleable.XTabLayout_xy_tabPadding, 0);
-        mTabPaddingStart = a.getDimensionPixelSize(R.styleable.XTabLayout_xy_tabPaddingStart,
+                .getDimensionPixelSize(R.styleable.XTabLayout_x_tabPadding, 0);
+        mTabPaddingStart = a.getDimensionPixelSize(R.styleable.XTabLayout_x_tabPaddingStart,
                 mTabPaddingStart);
-        mTabPaddingTop = a.getDimensionPixelSize(R.styleable.XTabLayout_xy_tabPaddingTop,
+        mTabPaddingTop = a.getDimensionPixelSize(R.styleable.XTabLayout_x_tabPaddingTop,
                 mTabPaddingTop);
-        mTabPaddingEnd = a.getDimensionPixelSize(R.styleable.XTabLayout_xy_tabPaddingEnd,
+        mTabPaddingEnd = a.getDimensionPixelSize(R.styleable.XTabLayout_x_tabPaddingEnd,
                 mTabPaddingEnd);
-        mTabPaddingBottom = a.getDimensionPixelSize(R.styleable.XTabLayout_xy_tabPaddingBottom,
+        mTabPaddingBottom = a.getDimensionPixelSize(R.styleable.XTabLayout_x_tabPaddingBottom,
                 mTabPaddingBottom);
 
-        mTabTextAppearance = a.getResourceId(R.styleable.XTabLayout_xy_tabTextAppearance,
+        mTabTextAppearance = a.getResourceId(R.styleable.XTabLayout_x_tabTextAppearance,
                 R.style.TextAppearance_Design_Tab);
 
         // Text colors/sizes come from the text appearance first
@@ -261,27 +261,27 @@ public class XTabLayout extends HorizontalScrollView {
             ta.recycle();
         }
 
-        if (a.hasValue(R.styleable.XTabLayout_xy_tabTextColor)) {
+        if (a.hasValue(R.styleable.XTabLayout_x_tabTextColor)) {
             // If we have an explicit text color set, use it instead
-            mTabTextColors = a.getColorStateList(R.styleable.XTabLayout_xy_tabTextColor);
+            mTabTextColors = a.getColorStateList(R.styleable.XTabLayout_x_tabTextColor);
         }
 
-        if (a.hasValue(R.styleable.XTabLayout_xy_tabSelectedTextColor)) {
+        if (a.hasValue(R.styleable.XTabLayout_x_tabSelectedTextColor)) {
             // We have an explicit selected text color set, so we need to make merge it with the
             // current colors. This is exposed so that developers can use theme attributes to set
             // this (theme attrs in ColorStateLists are Lollipop+)
-            final int selected = a.getColor(R.styleable.XTabLayout_xy_tabSelectedTextColor, 0);
+            final int selected = a.getColor(R.styleable.XTabLayout_x_tabSelectedTextColor, 0);
             mTabTextColors = createColorStateList(mTabTextColors.getDefaultColor(), selected);
         }
 
-        mRequestedTabMinWidth = a.getDimensionPixelSize(R.styleable.XTabLayout_xy_tabMinWidth,
+        mRequestedTabMinWidth = a.getDimensionPixelSize(R.styleable.XTabLayout_x_tabMinWidth,
                 INVALID_WIDTH);
-        mRequestedTabMaxWidth = a.getDimensionPixelSize(R.styleable.XTabLayout_xy_tabMaxWidth,
+        mRequestedTabMaxWidth = a.getDimensionPixelSize(R.styleable.XTabLayout_x_tabMaxWidth,
                 INVALID_WIDTH);
-        mTabBackgroundResId = a.getResourceId(R.styleable.XTabLayout_xy_tabBackground, 0);
-        mContentInsetStart = a.getDimensionPixelSize(R.styleable.XTabLayout_xy_tabContentStart, 0);
-        mMode = a.getInt(R.styleable.XTabLayout_xy_tabMode, MODE_FIXED);
-        mTabGravity = a.getInt(R.styleable.XTabLayout_xy_tabGravity, GRAVITY_FILL);
+        mTabBackgroundResId = a.getResourceId(R.styleable.XTabLayout_x_tabBackground, 0);
+        mContentInsetStart = a.getDimensionPixelSize(R.styleable.XTabLayout_x_tabContentStart, 0);
+        mMode = a.getInt(R.styleable.XTabLayout_x_tabMode, MODE_FIXED);
+        mTabGravity = a.getInt(R.styleable.XTabLayout_x_tabGravity, GRAVITY_FILL);
         a.recycle();
 
         // TODO add attr for these
