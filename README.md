@@ -8,6 +8,10 @@
 
 添加x_tabIndicatorWidth来支持TabLayout的Indicator的width的自定义。
 
+截图：
+
+![](http://ohazfcl3s.bkt.clouddn.com/TabLayout_1.jpeg)
+
 ```
 <declare-styleable name="XTabLayout">
         <attr name="x_tabIndicatorColor" format="color"/>
@@ -35,10 +39,5 @@
         <attr name="x_tabPadding" format="dimension"/>
     </declare-styleable>
 ```
-
-
-截图：
-
-![](http://ohazfcl3s.bkt.clouddn.com/TabLayout_1.jpeg)
 
 博客链接：[关于TabLayout的indicator宽度的一次探索](https://blog.csdn.net/h_gao/article/details/79784325)
