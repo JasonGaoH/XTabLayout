@@ -136,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initData() {
-        for (int i = 0;i < 5;i++) {
+        for (int i = 0;i < 6;i++) {
             if(i ==1) {
                 stringList.add("发现发现" + i);
             } else {

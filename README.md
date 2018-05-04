@@ -10,7 +10,6 @@
 添加<attr name="xy_tabIndicatorWidth" format="dimension"/>，支持TabLayout的Indicator的width的自定义。
 ```
 <declare-styleable name="XTabLayout">
-        <attr name="indicatorPadding" format="dimension"/>
         <attr name="xy_tabIndicatorColor" format="color"/>
         <attr name="xy_tabIndicatorHeight" format="dimension"/>
         <attr name="xy_tabIndicatorWidth" format="dimension"/>
