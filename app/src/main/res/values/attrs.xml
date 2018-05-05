@@ -2,6 +2,7 @@
 <resources>
 
     <declare-styleable name="XTabLayout">
+        <attr name="x_tabIndicatorAnimation" format="boolean"/>
         <attr name="x_tabIndicatorColor" format="color"/>
         <attr name="x_tabIndicatorHeight" format="dimension"/>
         <attr name="x_tabIndicatorWidth" format="dimension"/>

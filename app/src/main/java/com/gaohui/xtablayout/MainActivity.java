@@ -18,6 +18,7 @@ import com.gaohui.xtablayout.widgets.XTabLayout;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -27,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
     private TabLayout tabLayoutThree;
     private XTabLayout tabLayoutFour;
     private ViewPager viewPager;
+
+   private String[] strArray = new String[]{"关注", "推荐", "视频", "直播", "图片", "段子", "精华", "热门"};
 
     private List<String> stringList = new ArrayList<>();
     private List<Fragment> fragmentList = new ArrayList<>();
@@ -136,13 +139,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initData() {
-        for (int i = 0;i < 6;i++) {
-            if(i ==1) {
-                stringList.add("发现发现" + i);
-            } else {
-                stringList.add("发现" + i);
-            }
-
+        stringList.addAll(Arrays.asList(strArray));
+        for (int i=0;i<stringList.size();i++) {
             Fragment fragment = EmptyFragment.newInstance(i);
             fragmentList.add(fragment);
         }

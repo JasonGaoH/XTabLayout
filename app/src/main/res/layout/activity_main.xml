@@ -27,6 +27,7 @@
   <com.gaohui.xtablayout.widgets.XTabLayout
       android:id="@+id/tabsFour"
       app:x_tabMode="scrollable"
+      app:x_tabIndicatorAnimation="true"
       android:layout_width="match_parent"
       android:layout_height="45dp"/>
 

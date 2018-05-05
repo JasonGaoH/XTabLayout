@@ -33,6 +33,7 @@ import android.support.v7.widget.TooltipCompat;
 import android.text.Layout;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -234,6 +235,8 @@ public class XTabLayout extends HorizontalScrollView {
         mTabStrip.setSelectedIndicatorWidth(
                 a.getDimensionPixelSize(R.styleable.XTabLayout_x_tabIndicatorWidth, dpToPx(28)));
         mTabStrip.setSelectedIndicatorColor(a.getColor(R.styleable.XTabLayout_x_tabIndicatorColor, 0));
+
+        mTabStrip.setIndicatorAnimationSupport(a.getBoolean(R.styleable.XTabLayout_x_tabIndicatorAnimation,false));
 
         mTabPaddingStart = mTabPaddingTop = mTabPaddingEnd = mTabPaddingBottom = a
                 .getDimensionPixelSize(R.styleable.XTabLayout_x_tabPadding, 0);
@@ -1715,7 +1718,11 @@ public class XTabLayout extends HorizontalScrollView {
         private final Paint mSelectedIndicatorPaint;
 
         int mSelectedPosition = -1;
+        int mLastPosition = -1;
         float mSelectionOffset;
+
+        private boolean mIsSupportIndicatorAnimation = false;
+
 
         private int mLayoutDirection = -1;
 
@@ -1726,6 +1733,7 @@ public class XTabLayout extends HorizontalScrollView {
 
         SlidingTabStrip(Context context) {
             super(context);
+            //需要重写onDraw，所以设置这个flag
             setWillNotDraw(false);
             mSelectedIndicatorPaint = new Paint();
         }
@@ -1768,7 +1776,17 @@ public class XTabLayout extends HorizontalScrollView {
 
             mSelectedPosition = position;
             mSelectionOffset = positionOffset;
-            updateIndicatorPosition();
+            if(mIsSupportIndicatorAnimation) {
+                if(mLastPosition > mSelectedPosition) {
+                    updateIndicatorPosition2Left();
+                } else {
+                    updateIndicatorPosition2Right();
+                }
+            } else {
+                updateIndicatorPosition();
+            }
+
+
         }
 
         float getIndicatorPosition() {
@@ -1864,6 +1882,74 @@ public class XTabLayout extends HorizontalScrollView {
             }
         }
 
+        /**
+         * 支持Indicator动画调整后左滑状态下的更新方法
+         */
+        private void updateIndicatorPosition2Left() {
+            final View selectedTitle = getChildAt(mSelectedPosition);
+            //TODO
+            if(mLastPosition == -1) mLastPosition = mSelectedPosition;
+            Log.d("gh","mLastPosition: " + mLastPosition);
+            final View lastSelectedTitle = getChildAt(mLastPosition);
+            int left, right;
+            if (selectedTitle != null && selectedTitle.getWidth() > 0) {
+                left = selectedTitle.getLeft() + (selectedTitle.getWidth() - mSelectedIndicatorWidth) / 2;
+                right = left + mSelectedIndicatorWidth;
+
+                if (mSelectionOffset > 0f && mSelectedPosition < getChildCount() - 1) {
+                    // Draw the selection partway between the tabs
+                    View nextTitle = getChildAt(mSelectedPosition + 1);
+                    left = (int) (mSelectionOffset * (nextTitle.getLeft() + (nextTitle.getWidth() - mSelectedIndicatorWidth) / 2)
+                            + (1.0f - mSelectionOffset) * left);
+                    right = lastSelectedTitle.getLeft() + (lastSelectedTitle.getWidth() -mSelectedIndicatorWidth)/2 + mSelectedIndicatorWidth;
+
+                }
+            } else {
+                left = right = -1;
+            }
+
+            setIndicatorPosition(left, right);
+        }
+
+        /**
+         * 支持Indicator动画调整后右滑状态下的更新方法
+         */
+        private void updateIndicatorPosition2Right() {
+            final View selectedTitle = getChildAt(mSelectedPosition);
+            //avoid IndexOutOfRangeException
+            if(mLastPosition == -1) mLastPosition = mSelectedPosition;
+            Log.d("gh","mLastPosition: " + mLastPosition);
+            final View lastSelectedTitle = getChildAt(mLastPosition);
+            int left, right,tempRight;
+            if (selectedTitle != null && selectedTitle.getWidth() > 0) {
+                left = selectedTitle.getLeft() + (selectedTitle.getWidth() - mSelectedIndicatorWidth) / 2;
+                right = left + mSelectedIndicatorWidth;
+                tempRight = right;
+
+                if (mSelectionOffset > 0f && mSelectedPosition < getChildCount() - 1) {
+
+                    // Draw the selection partway between the tabs
+                    View nextTitle = getChildAt(mSelectedPosition + 1);
+
+                    right =  (int) (mSelectionOffset * (nextTitle.getLeft() + (nextTitle.getWidth() - mSelectedIndicatorWidth) / 2 + mSelectedIndicatorWidth)
+                            + (1.0f - mSelectionOffset) * (left + (nextTitle.getWidth()-mSelectedIndicatorWidth)/2));
+                    left = lastSelectedTitle.getLeft() + (lastSelectedTitle.getWidth() -mSelectedIndicatorWidth)/2;
+
+                    //临时方案，解决right偶尔比实际right小的问题
+                    if(right < tempRight) right = tempRight;
+
+                }
+            } else {
+                left = right = -1;
+            }
+
+            setIndicatorPosition(left, right);
+        }
+
+
+        /**
+         * 默认改了Indicator宽度后更新Indicator Position的方法
+         */
         private void updateIndicatorPosition() {
             final View selectedTitle = getChildAt(mSelectedPosition);
             int left, right;
@@ -1886,9 +1972,14 @@ public class XTabLayout extends HorizontalScrollView {
             setIndicatorPosition(left, right);
         }
 
+
+
+
+        //indicator 更新的方法
         void setIndicatorPosition(int left, int right) {
             if (left != mIndicatorLeft || right != mIndicatorRight) {
                 // If the indicator's left/right has changed, invalidate
+                Log.d("gh","left : " + left + "right: " + right);
                 mIndicatorLeft = left;
                 mIndicatorRight = right;
                 ViewCompat.postInvalidateOnAnimation(this);
@@ -1974,6 +2065,14 @@ public class XTabLayout extends HorizontalScrollView {
                         mIndicatorRight, getHeight(), mSelectedIndicatorPaint);
             }
         }
+
+        public void updateTabPosition(int currentPosition) {
+            mLastPosition = currentPosition;
+        }
+
+        public void setIndicatorAnimationSupport(boolean isSupportIndicatorAnimation) {
+            mIsSupportIndicatorAnimation = isSupportIndicatorAnimation;
+        }
     }
 
     private static ColorStateList createColorStateList(int defaultColor, int selectedColor) {
@@ -2050,6 +2149,14 @@ public class XTabLayout extends HorizontalScrollView {
         public void onPageScrollStateChanged(final int state) {
             mPreviousScrollState = mScrollState;
             mScrollState = state;
+            XTabLayout tabLayout = mTabLayoutRef.get();
+            if(tabLayout == null) return;
+            ViewPager viewPager = tabLayout.mViewPager;
+            SlidingTabStrip tabStrip = tabLayout.mTabStrip;
+            if(viewPager != null && tabStrip != null && state == SCROLL_STATE_SETTLING) {
+                tabStrip.updateTabPosition(viewPager.getCurrentItem());
+            }
+
         }
 
         @Override
@@ -2067,6 +2174,7 @@ public class XTabLayout extends HorizontalScrollView {
                 final boolean updateIndicator = !(mScrollState == SCROLL_STATE_SETTLING
                         && mPreviousScrollState == SCROLL_STATE_IDLE);
                 tabLayout.setScrollPosition(position, positionOffset, updateText, updateIndicator);
+
             }
         }
 
@@ -2077,9 +2185,18 @@ public class XTabLayout extends HorizontalScrollView {
                     && position < tabLayout.getTabCount()) {
                 // Select the tab, only updating the indicator if we're not being dragged/settled
                 // (since onPageScrolled will handle that).
+                //选择该选项卡，只在未被拖动/解决的情况下更新指示器(因为onPageScrolled将处理这个)。
                 final boolean updateIndicator = mScrollState == SCROLL_STATE_IDLE
                         || (mScrollState == SCROLL_STATE_SETTLING
                         && mPreviousScrollState == SCROLL_STATE_IDLE);
+
+                //fix 解决很慢的情况下滑动，Indicator从拉的很长的问题
+                ViewPager viewPager = tabLayout.mViewPager;
+                SlidingTabStrip tabStrip = tabLayout.mTabStrip;
+                if(viewPager != null && tabStrip != null) {
+                    tabStrip.updateTabPosition(viewPager.getCurrentItem());
+                }
+
                 tabLayout.selectTab(tabLayout.getTabAt(position), updateIndicator);
             }
         }
