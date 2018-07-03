@@ -26,6 +26,7 @@
         <attr name="x_tabPaddingEnd" format="dimension"/>
         <attr name="x_tabPaddingBottom" format="dimension"/>
         <attr name="x_tabPadding" format="dimension"/>
+        <attr name="x_indicatorMarginTop" format="dimension" />
     </declare-styleable>
 
     <declare-styleable name="XTabItem">

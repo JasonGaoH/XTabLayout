@@ -206,6 +206,10 @@ public class XTabLayout extends HorizontalScrollView {
 
     // Pool we use as a simple RecyclerBin
     private final Pools.Pool<TabView> mTabViewPool = new Pools.SimplePool<>(12);
+    /**
+     * 添加Indicator与文字之间的marginTop
+     */
+    private int mIndicatorMarginTop = 0;
 
     public XTabLayout(Context context) {
         this(context, null);
@@ -285,6 +289,7 @@ public class XTabLayout extends HorizontalScrollView {
         mContentInsetStart = a.getDimensionPixelSize(R.styleable.XTabLayout_x_tabContentStart, 0);
         mMode = a.getInt(R.styleable.XTabLayout_x_tabMode, MODE_FIXED);
         mTabGravity = a.getInt(R.styleable.XTabLayout_x_tabGravity, GRAVITY_FILL);
+        mIndicatorMarginTop = a.getDimensionPixelSize(R.styleable.XTabLayout_x_indicatorMarginTop, mIndicatorMarginTop);
         a.recycle();
 
         // TODO add attr for these
@@ -2061,8 +2066,8 @@ public class XTabLayout extends HorizontalScrollView {
 
             // Thick colored underline below the current selection
             if (mIndicatorLeft >= 0 && mIndicatorRight > mIndicatorLeft) {
-                canvas.drawRect(mIndicatorLeft, getHeight() - mSelectedIndicatorHeight,
-                        mIndicatorRight, getHeight(), mSelectedIndicatorPaint);
+                canvas.drawRect(mIndicatorLeft, getHeight() - mSelectedIndicatorHeight - mIndicatorMarginTop,
+                        mIndicatorRight, getHeight() - mIndicatorMarginTop, mSelectedIndicatorPaint);
             }
         }
 
