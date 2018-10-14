@@ -5,7 +5,7 @@
 
 仿微博导航条效果图：
 
-![](http://ohazfcl3s.bkt.clouddn.com/ezgif.com-optimize.gif)
+![](https://raw.githubusercontent.com/JasonGaoH/XTabLayout/master/gif/xtablayout_optimize.gif)
 
 能够自定义TabLayout宽度的效果图：
 
