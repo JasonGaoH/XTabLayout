@@ -1205,8 +1205,20 @@ public class XTabLayout extends HorizontalScrollView {
             return this;
         }
 
+        /**
+         * 返回TabView的TextView，支持在Tab上添加红点
+         * @return
+         */
         public TextView getView() {
             return mView.mTextView ;
+        }
+
+        /**
+         * 返回TabView，支持在Tab上添加红点数字
+         * @return
+         */
+        public TabView getTabView() {
+            return mView;
         }
 
 

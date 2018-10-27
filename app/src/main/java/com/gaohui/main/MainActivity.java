@@ -2,6 +2,7 @@ package com.gaohui.main;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -10,10 +11,12 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.gaohui.badgeview.BadgeView;
 import com.gaohui.xtablayout.R;
 import com.gaohui.xtablayout.XTabLayout;
 
@@ -30,6 +33,9 @@ public class MainActivity extends AppCompatActivity {
     private XTabLayout tabLayoutFour;
     private XTabLayout tabLayoutFive;
     private ViewPager viewPager;
+
+    private BadgeView redDotBadgeView;
+    private BadgeView redNumberBadgeView;
 
    private String[] strArray = new String[]{"关注", "推荐", "视频", "直播", "图片", "段子", "精华", "热门"};
 
@@ -137,8 +143,31 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        //add badgeView
+        //add normal badgeView
+        if(redDotBadgeView == null) {
+            XTabLayout.Tab tab = tabLayoutFive.getTabAt(0);
+            if(tab != null && tab.getView() != null) {
+                redDotBadgeView =  new BadgeView(this,tab.getView());
+                redDotBadgeView.setBadgeMargin(BadgeView.POSITION_TOP_RIGHT);
+                redDotBadgeView.setBadgeMargin(0, 0);
+                redDotBadgeView.setOvalShape(3);
+                redDotBadgeView.show();
+            }
+        }
 
+        //add number badgeView
+        if(redNumberBadgeView == null) {
+            XTabLayout.Tab tab = tabLayoutFive.getTabAt(1);
+            if(tab != null && tab.getTabView() != null) {
+                redNumberBadgeView = new BadgeView(this,tab.getTabView());
+                redNumberBadgeView.setBadgeMargin( BadgeView.POSITION_TOP_RIGHT);
+                redNumberBadgeView.setBadgeMargin(dip2px(this,8f), 0);
+                redNumberBadgeView.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
+                redNumberBadgeView.setTypeface(Typeface.DEFAULT_BOLD);
+                redNumberBadgeView.setText("9");
+                redNumberBadgeView.show();
+            }
+        }
 
 
     }
