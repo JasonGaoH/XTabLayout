@@ -1,4 +1,4 @@
-package com.gaohui.xtablayout;
+package com.gaohui.main;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -14,7 +14,8 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.gaohui.xtablayout.widgets.XTabLayout;
+import com.gaohui.xtablayout.R;
+import com.gaohui.xtablayout.XTabLayout;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;

@@ -24,7 +24,7 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"/>
 
-  <com.gaohui.xtablayout.widgets.XTabLayout
+  <com.gaohui.xtablayout.XTabLayout
       android:id="@+id/tabsFour"
       app:x_tabMode="scrollable"
       app:x_tabIndicatorAnimation="true"

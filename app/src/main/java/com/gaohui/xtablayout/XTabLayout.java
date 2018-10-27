@@ -1,4 +1,4 @@
-package com.gaohui.xtablayout.widgets;
+package com.gaohui.xtablayout;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -47,8 +47,6 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.gaohui.xtablayout.R;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

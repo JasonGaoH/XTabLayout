@@ -1,4 +1,4 @@
-package com.gaohui.xtablayout.widgets;
+package com.gaohui.xtablayout;
 
 import android.content.Context;
 import android.content.res.TypedArray;

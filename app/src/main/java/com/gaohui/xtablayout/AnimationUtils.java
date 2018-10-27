@@ -1,4 +1,4 @@
-package com.gaohui.xtablayout.widgets;
+package com.gaohui.xtablayout;
 
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.view.animation.Interpolator;
