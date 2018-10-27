@@ -31,6 +31,13 @@
       android:layout_width="match_parent"
       android:layout_height="45dp"/>
 
+  <com.gaohui.xtablayout.XTabLayout
+      android:id="@+id/tabsFive"
+      app:x_tabMode="scrollable"
+      app:x_tabIndicatorAnimation="true"
+      android:layout_width="match_parent"
+      android:layout_height="30dp"/>
+
   <android.support.v4.view.ViewPager
       android:id="@+id/viewPager"
       android:layout_width="match_parent"

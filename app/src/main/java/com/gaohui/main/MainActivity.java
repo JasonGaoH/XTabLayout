@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private TabLayout tabLayoutTwo;
     private TabLayout tabLayoutThree;
     private XTabLayout tabLayoutFour;
+    private XTabLayout tabLayoutFive;
     private ViewPager viewPager;
 
    private String[] strArray = new String[]{"关注", "推荐", "视频", "直播", "图片", "段子", "精华", "热门"};
@@ -50,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
         tabLayoutTwo = findViewById(R.id.tabsTwo);
         tabLayoutThree = findViewById(R.id.tabsThree);
         tabLayoutFour = findViewById(R.id.tabsFour);
+        tabLayoutFive = findViewById(R.id.tabsFive);
         viewPager = findViewById(R.id.viewPager);
 
         initData();
@@ -61,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
         tabLayoutTwo.setupWithViewPager(viewPager);
         tabLayoutThree.setupWithViewPager(viewPager);
         tabLayoutFour.setupWithViewPager(viewPager);
+        tabLayoutFive.setupWithViewPager(viewPager);
 
 
         tabLayoutTwo.post(new Runnable() {
@@ -134,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+        //add badgeView
 
 
 
