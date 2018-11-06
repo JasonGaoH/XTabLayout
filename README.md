@@ -12,8 +12,11 @@
 
 ![](http://ohazfcl3s.bkt.clouddn.com/TabLayout_1.jpeg)
 
+![](https://github.com/JasonGaoH/XTabLayout/blob/master/gif/xtablayout_num.png)
+
 - 添加x_tabIndicatorWidth来支持TabLayout的Indicator的width的自定义，默认宽度28dp
 - 添加x_tabIndicatorAnimation来控制是否支持类似微博的导航条动效，默认false不支持
+- 支持在Tab上加入红点和红点数字
 
 > 在对比几种修改TabLayout的Indicator的width的方法后，决定采用修改源码的方法来实现Indicator 宽度的自定义。（主要因为两种反射版本会压缩Tab边距的方式。）
 
