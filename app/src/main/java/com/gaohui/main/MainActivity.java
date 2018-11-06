@@ -162,8 +162,7 @@ public class MainActivity extends AppCompatActivity {
                 redNumberBadgeView = new BadgeView(this,tab.getTabView());
                 redNumberBadgeView.setBadgeMargin( BadgeView.POSITION_TOP_RIGHT);
                 redNumberBadgeView.setBadgeMargin(dip2px(this,8f), 0);
-                redNumberBadgeView.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
-                redNumberBadgeView.setTypeface(Typeface.DEFAULT_BOLD);
+                redNumberBadgeView.setGravity(Gravity.CENTER);
                 redNumberBadgeView.setText("9");
                 redNumberBadgeView.show();
             }
