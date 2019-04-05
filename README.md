@@ -10,9 +10,7 @@
 能够自定义TabLayout宽度的效果图：
 
 
-![](http://ohazfcl3s.bkt.clouddn.com/TabLayout_1.jpeg)
-
-![](https://github.com/JasonGaoH/XTabLayout/blob/master/gif/xtablayout_num.png)
+![](https://raw.githubusercontent.com/JasonGaoH/XTabLayout/master/gif/xtablayout_num.png)
 
 - 添加x_tabIndicatorWidth来支持TabLayout的Indicator的width的自定义，默认宽度28dp
 - 添加x_tabIndicatorAnimation来控制是否支持类似微博的导航条动效，默认false不支持
