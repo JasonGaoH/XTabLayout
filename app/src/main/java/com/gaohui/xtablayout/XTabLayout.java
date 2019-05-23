@@ -9,7 +9,12 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.database.DataSetObserver;
 import android.graphics.Canvas;
+import android.graphics.LinearGradient;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.RectF;
+import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.ColorInt;
@@ -239,6 +244,8 @@ public class XTabLayout extends HorizontalScrollView {
         mTabStrip.setSelectedIndicatorColor(a.getColor(R.styleable.XTabLayout_x_tabIndicatorColor, 0));
 
         mTabStrip.setIndicatorAnimationSupport(a.getBoolean(R.styleable.XTabLayout_x_tabIndicatorAnimation,false));
+
+        mTabStrip.setIndicatorRoundRect(a.getBoolean(R.styleable.XTabLayout_x_tabIndicatorRoundRect,false));
 
         mTabPaddingStart = mTabPaddingTop = mTabPaddingEnd = mTabPaddingBottom = a
                 .getDimensionPixelSize(R.styleable.XTabLayout_x_tabPadding, 0);
@@ -1737,7 +1744,11 @@ public class XTabLayout extends HorizontalScrollView {
         float mSelectionOffset;
 
         private boolean mIsSupportIndicatorAnimation = false;
+        private boolean mIsSupportIndicatorRoundRect = false;
 
+        private RectF mIndicatorRect = new RectF();
+
+        private boolean mIsColorDirty = true;
 
         private int mLayoutDirection = -1;
 
@@ -1751,11 +1762,13 @@ public class XTabLayout extends HorizontalScrollView {
             //需要重写onDraw，所以设置这个flag
             setWillNotDraw(false);
             mSelectedIndicatorPaint = new Paint();
+            mSelectedIndicatorPaint.setAntiAlias(true);
         }
 
         void setSelectedIndicatorColor(int color) {
             if (mSelectedIndicatorPaint.getColor() != color) {
                 mSelectedIndicatorPaint.setColor(color);
+                mIsColorDirty = true;
                 ViewCompat.postInvalidateOnAnimation(this);
             }
         }
@@ -1791,15 +1804,7 @@ public class XTabLayout extends HorizontalScrollView {
 
             mSelectedPosition = position;
             mSelectionOffset = positionOffset;
-            if(mIsSupportIndicatorAnimation) {
-                if(mLastPosition > mSelectedPosition) {
-                    updateIndicatorPosition2Left();
-                } else {
-                    updateIndicatorPosition2Right();
-                }
-            } else {
-                updateIndicatorPosition();
-            }
+            updateIndicatorPosition();
 
 
         }
@@ -1898,93 +1903,45 @@ public class XTabLayout extends HorizontalScrollView {
         }
 
         /**
-         * 支持Indicator动画调整后左滑状态下的更新方法
-         */
-        private void updateIndicatorPosition2Left() {
-            final View selectedTitle = getChildAt(mSelectedPosition);
-            //TODO
-            if(mLastPosition == -1) mLastPosition = mSelectedPosition;
-            Log.d("gh","mLastPosition: " + mLastPosition);
-            final View lastSelectedTitle = getChildAt(mLastPosition);
-            int left, right;
-            if (selectedTitle != null && selectedTitle.getWidth() > 0) {
-                left = selectedTitle.getLeft() + (selectedTitle.getWidth() - mSelectedIndicatorWidth) / 2;
-                right = left + mSelectedIndicatorWidth;
-
-                if (mSelectionOffset > 0f && mSelectedPosition < getChildCount() - 1) {
-                    // Draw the selection partway between the tabs
-                    View nextTitle = getChildAt(mSelectedPosition + 1);
-                    left = (int) (mSelectionOffset * (nextTitle.getLeft() + (nextTitle.getWidth() - mSelectedIndicatorWidth) / 2)
-                            + (1.0f - mSelectionOffset) * left);
-                    right = lastSelectedTitle.getLeft() + (lastSelectedTitle.getWidth() -mSelectedIndicatorWidth)/2 + mSelectedIndicatorWidth;
-
-                }
-            } else {
-                left = right = -1;
-            }
-
-            setIndicatorPosition(left, right);
-        }
-
-        /**
-         * 支持Indicator动画调整后右滑状态下的更新方法
-         */
-        private void updateIndicatorPosition2Right() {
-            final View selectedTitle = getChildAt(mSelectedPosition);
-            //avoid IndexOutOfRangeException
-            if(mLastPosition == -1) mLastPosition = mSelectedPosition;
-            Log.d("gh","mLastPosition: " + mLastPosition);
-            final View lastSelectedTitle = getChildAt(mLastPosition);
-            int left, right,tempRight;
-            if (selectedTitle != null && selectedTitle.getWidth() > 0) {
-                left = selectedTitle.getLeft() + (selectedTitle.getWidth() - mSelectedIndicatorWidth) / 2;
-                right = left + mSelectedIndicatorWidth;
-                tempRight = right;
-
-                if (mSelectionOffset > 0f && mSelectedPosition < getChildCount() - 1) {
-
-                    // Draw the selection partway between the tabs
-                    View nextTitle = getChildAt(mSelectedPosition + 1);
-
-                    right =  (int) (mSelectionOffset * (nextTitle.getLeft() + (nextTitle.getWidth() - mSelectedIndicatorWidth) / 2 + mSelectedIndicatorWidth)
-                            + (1.0f - mSelectionOffset) * (left + (nextTitle.getWidth()-mSelectedIndicatorWidth)/2));
-                    left = lastSelectedTitle.getLeft() + (lastSelectedTitle.getWidth() -mSelectedIndicatorWidth)/2;
-
-                    //临时方案，解决right偶尔比实际right小的问题
-                    if(right < tempRight) right = tempRight;
-
-                }
-            } else {
-                left = right = -1;
-            }
-
-            setIndicatorPosition(left, right);
-        }
-
-
-        /**
          * 默认改了Indicator宽度后更新Indicator Position的方法
          */
         private void updateIndicatorPosition() {
-            final View selectedTitle = getChildAt(mSelectedPosition);
-            int left, right;
+                final View selectedTitle = getChildAt(mSelectedPosition);
+                int left, right;
 
-            if (selectedTitle != null && selectedTitle.getWidth() > 0) {
-                left = selectedTitle.getLeft() + (selectedTitle.getWidth() - mSelectedIndicatorWidth) / 2;
-                right = left + mSelectedIndicatorWidth;
-
-                if (mSelectionOffset > 0f && mSelectedPosition < getChildCount() - 1) {
-                    // Draw the selection partway between the tabs
-                    View nextTitle = getChildAt(mSelectedPosition + 1);
-                    left = (int) (mSelectionOffset * (nextTitle.getLeft() + (nextTitle.getWidth() - mSelectedIndicatorWidth) / 2)
-                            + (1.0f - mSelectionOffset) * left);
+                if (selectedTitle != null && selectedTitle.getWidth() > 0) {
+                    left = selectedTitle.getLeft() + (selectedTitle.getWidth() - mSelectedIndicatorWidth) / 2;
                     right = left + mSelectedIndicatorWidth;
-                }
-            } else {
-                left = right = -1;
-            }
 
-            setIndicatorPosition(left, right);
+                    if (mSelectionOffset > 0f && mSelectedPosition < getChildCount() - 1) {
+                        // Draw the selection partway between the tabs
+                        View nextTitle = getChildAt(mSelectedPosition + 1);
+                        //是否支持动画，支持动画主要这里的处理不一样
+                        if(mIsSupportIndicatorAnimation) {
+                            int nextTitleLeft = nextTitle.getLeft() + (nextTitle.getWidth() - mSelectedIndicatorWidth)/2;
+                            if (mSelectionOffset <= 0.5f) {
+                                left = selectedTitle.getLeft() +(selectedTitle.getWidth() - mSelectedIndicatorWidth) / 2;
+
+                                right = AnimationUtils.lerp(right, nextTitleLeft + mSelectedIndicatorWidth, mSelectionOffset * 2);
+                            } else {
+
+                                left = AnimationUtils.lerp(left, nextTitleLeft, (mSelectionOffset - 0.5f) * 2);
+                                right = nextTitleLeft + mSelectedIndicatorWidth;
+                            }
+                        } else {
+                            // Draw the selection partway between the tabs
+                            left = (int) (mSelectionOffset * (nextTitle.getLeft() + (nextTitle.getWidth() - mSelectedIndicatorWidth) / 2)
+                                    + (1.0f - mSelectionOffset) * left);
+                            right = left + mSelectedIndicatorWidth;
+                        }
+
+                    }
+                } else {
+                    left = right = -1;
+                }
+
+                setIndicatorPosition(left, right);
+
         }
 
 
@@ -1994,7 +1951,6 @@ public class XTabLayout extends HorizontalScrollView {
         void setIndicatorPosition(int left, int right) {
             if (left != mIndicatorLeft || right != mIndicatorRight) {
                 // If the indicator's left/right has changed, invalidate
-                Log.d("gh","left : " + left + "right: " + right);
                 mIndicatorLeft = left;
                 mIndicatorRight = right;
                 ViewCompat.postInvalidateOnAnimation(this);
@@ -2054,9 +2010,32 @@ public class XTabLayout extends HorizontalScrollView {
                     @Override
                     public void onAnimationUpdate(ValueAnimator animator) {
                         final float fraction = animator.getAnimatedFraction();
-                        setIndicatorPosition(
-                                AnimationUtils.lerp(startLeft, targetLeft, fraction),
-                                AnimationUtils.lerp(startRight, targetRight, fraction));
+                        if(mIsSupportIndicatorAnimation) {
+                            int left, right;
+                            if (mSelectedPosition < position) {
+                                if (fraction <= 0.5f) {
+                                    left = startLeft;
+                                    right = AnimationUtils.lerp(startRight, targetRight, fraction * 2);
+                                } else {
+                                    left = AnimationUtils.lerp(startLeft, targetLeft, (fraction - 0.5f) * 2);
+                                    right = targetRight;
+                                }
+                            } else {
+                                if (fraction <= 0.5f) {
+                                    left = AnimationUtils.lerp(startLeft, targetLeft, fraction * 2);
+                                    right = startRight;
+                                } else {
+                                    left = targetLeft;
+                                    right = AnimationUtils.lerp(startRight, targetRight, (fraction - 0.5f) * 2);
+                                }
+                            }
+                            setIndicatorPosition(left, right);
+                        } else {
+                            setIndicatorPosition(
+                                    AnimationUtils.lerp(startLeft, targetLeft, fraction),
+                                    AnimationUtils.lerp(startRight, targetRight, fraction));
+                        }
+
                     }
                 });
                 animator.addListener(new AnimatorListenerAdapter() {
@@ -2073,12 +2052,48 @@ public class XTabLayout extends HorizontalScrollView {
         @Override
         public void draw(Canvas canvas) {
             super.draw(canvas);
+            //是否绘制圆角
+            if(mIsSupportIndicatorRoundRect) {
+                int left = mIndicatorLeft;
+                int right = mIndicatorRight;
 
-            // Thick colored underline below the current selection
-            if (mIndicatorLeft >= 0 && mIndicatorRight > mIndicatorLeft) {
-                canvas.drawRect(mIndicatorLeft, getHeight() - mSelectedIndicatorHeight - mIndicatorMarginTop,
-                        mIndicatorRight, getHeight() - mIndicatorMarginTop, mSelectedIndicatorPaint);
+                // get edges of
+                if (mSelectionOffset > 0 && mSelectedPosition < getChildCount() - 1) {
+                    View leftView = getChildAt(mSelectedPosition);
+                    View rightView = getChildAt(mSelectedPosition + 1);
+                    left = leftView.getLeft();
+                    right = rightView.getRight();
+                }
+
+                // ensure color updated
+                if (mSelectedIndicatorPaint.getShader() == null || mIsColorDirty) {
+                    LinearGradient gradient = new LinearGradient(0, 0, getWidth(), 0, mSelectedIndicatorPaint.getColor(), mSelectedIndicatorPaint.getColor(), Shader.TileMode.CLAMP);
+                    mSelectedIndicatorPaint.setShader(gradient);
+                }
+
+                // visible rect
+                mIndicatorRect.set(mIndicatorLeft, getHeight() - mSelectedIndicatorHeight - mIndicatorMarginTop,
+                        mIndicatorRight, getHeight() - mIndicatorMarginTop);
+
+                // show dst round rect only, but with src background
+                int sc = canvas.saveLayer(0, 0, getWidth(), getHeight(), null, Canvas.ALL_SAVE_FLAG);
+
+                // draw dst round rect
+                canvas.drawRoundRect(mIndicatorRect, (float) mSelectedIndicatorHeight/2, (float) mSelectedIndicatorHeight/2, mSelectedIndicatorPaint);
+                mSelectedIndicatorPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+                // draw src background on
+                canvas.drawRect(left, getHeight() - mSelectedIndicatorHeight - mIndicatorMarginTop,
+                        right, getHeight() - mIndicatorMarginTop, mSelectedIndicatorPaint);
+                mSelectedIndicatorPaint.setXfermode(null);
+                canvas.restoreToCount(sc);
+            } else {
+                // Thick colored underline below the current selection
+                if (mIndicatorLeft >= 0 && mIndicatorRight > mIndicatorLeft) {
+                    canvas.drawRect(mIndicatorLeft, getHeight() - mSelectedIndicatorHeight - mIndicatorMarginTop,
+                            mIndicatorRight, getHeight() - mIndicatorMarginTop, mSelectedIndicatorPaint);
+                }
             }
+
         }
 
         public void updateTabPosition(int currentPosition) {
@@ -2087,6 +2102,10 @@ public class XTabLayout extends HorizontalScrollView {
 
         public void setIndicatorAnimationSupport(boolean isSupportIndicatorAnimation) {
             mIsSupportIndicatorAnimation = isSupportIndicatorAnimation;
+        }
+
+        public void setIndicatorRoundRect(boolean isSupportRoundRect) {
+            mIsSupportIndicatorRoundRect = isSupportRoundRect;
         }
     }
 
@@ -2189,7 +2208,6 @@ public class XTabLayout extends HorizontalScrollView {
                 final boolean updateIndicator = !(mScrollState == SCROLL_STATE_SETTLING
                         && mPreviousScrollState == SCROLL_STATE_IDLE);
                 tabLayout.setScrollPosition(position, positionOffset, updateText, updateIndicator);
-
             }
         }
 
@@ -2200,18 +2218,9 @@ public class XTabLayout extends HorizontalScrollView {
                     && position < tabLayout.getTabCount()) {
                 // Select the tab, only updating the indicator if we're not being dragged/settled
                 // (since onPageScrolled will handle that).
-                //选择该选项卡，只在未被拖动/解决的情况下更新指示器(因为onPageScrolled将处理这个)。
                 final boolean updateIndicator = mScrollState == SCROLL_STATE_IDLE
                         || (mScrollState == SCROLL_STATE_SETTLING
                         && mPreviousScrollState == SCROLL_STATE_IDLE);
-
-                //fix 解决很慢的情况下滑动，Indicator从拉的很长的问题
-                ViewPager viewPager = tabLayout.mViewPager;
-                SlidingTabStrip tabStrip = tabLayout.mTabStrip;
-                if(viewPager != null && tabStrip != null) {
-                    tabStrip.updateTabPosition(viewPager.getCurrentItem());
-                }
-
                 tabLayout.selectTab(tabLayout.getTabAt(position), updateIndicator);
             }
         }

@@ -35,7 +35,8 @@
       android:id="@+id/tabsFive"
       app:x_tabMode="scrollable"
       android:layout_marginTop="15dp"
-      app:x_tabIndicatorAnimation="true"
+      app:x_tabIndicatorAnimation="false"
+      app:x_tabIndicatorRoundRect="true"
       android:layout_width="match_parent"
       android:layout_height="30dp"/>
 
