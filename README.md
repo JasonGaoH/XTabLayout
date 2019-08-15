@@ -10,7 +10,6 @@
 
 能够自定义TabLayout宽度的效果图：
 
-
 ![](./gif/xtablayout_num.png)
 
 - 添加x_tabIndicatorWidth来支持TabLayout的Indicator的width的自定义，默认宽度28dp
