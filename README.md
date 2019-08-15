@@ -2,10 +2,11 @@
 
 ### 支持TabLayout的Indicator的width的自定义
 ### 新增Indicator的仿微博导航条效果
+### 支持Indicator的圆角效果
 
 仿微博导航条效果图：
 
-![](https://raw.githubusercontent.com/JasonGaoH/XTabLayout/master/gif/xtablayout_optimize.gif)
+![](https://raw.githubusercontent.com/JasonGaoH/XTabLayout/master/gif/xtablayout.gif)
 
 能够自定义TabLayout宽度的效果图：
 
@@ -14,7 +15,9 @@
 
 - 添加x_tabIndicatorWidth来支持TabLayout的Indicator的width的自定义，默认宽度28dp
 - 添加x_tabIndicatorAnimation来控制是否支持类似微博的导航条动效，默认false不支持
+- 添加x_tabIndicatorRoundRect来控制Indicator下划线的圆角效果，默认false没有圆角
 - 支持在Tab上加入红点和红点数字
+
 
 > 在对比几种修改TabLayout的Indicator的width的方法后，决定采用修改源码的方法来实现Indicator 宽度的自定义。（主要因为两种反射版本会压缩Tab边距的方式。）
 
