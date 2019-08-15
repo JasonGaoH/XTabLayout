@@ -3,6 +3,7 @@ package com.gaohui.xtablayout;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
@@ -53,6 +54,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.gaohui.android.code.library.R;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.ref.WeakReference;
@@ -65,7 +68,7 @@ import static android.support.v4.view.ViewPager.SCROLL_STATE_IDLE;
 import static android.support.v4.view.ViewPager.SCROLL_STATE_SETTLING;
 
 /**
- * copy of {@link android.support.design.widget.TabLayout} <br/>
+ * copy of { android.support.design.widget.TabLayout } <br/>
  * add support for adjusting width of Indicator
  */
 
@@ -222,6 +225,7 @@ public class XTabLayout extends HorizontalScrollView {
         this(context, attrs, 0);
     }
 
+    @SuppressLint("PrivateResource")
     public XTabLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
@@ -262,7 +266,7 @@ public class XTabLayout extends HorizontalScrollView {
                 R.style.TextAppearance_Design_Tab);
 
         // Text colors/sizes come from the text appearance first
-        final TypedArray ta = context.obtainStyledAttributes(mTabTextAppearance,
+        @SuppressLint("CustomViewStyleable") final TypedArray ta = context.obtainStyledAttributes(mTabTextAppearance,
                 android.support.v7.appcompat.R.styleable.TextAppearance);
         try {
             mTabTextSize = ta.getDimensionPixelSize(
@@ -297,10 +301,10 @@ public class XTabLayout extends HorizontalScrollView {
         mIndicatorMarginTop = a.getDimensionPixelSize(R.styleable.XTabLayout_x_indicatorMarginTop, mIndicatorMarginTop);
         a.recycle();
 
-        // TODO add attr for these
+        // add attr for these
         final Resources res = getResources();
-        mTabTextMultiLineSize = res.getDimensionPixelSize(R.dimen.design_tab_text_size_2line);
-        mScrollableTabMinWidth = res.getDimensionPixelSize(R.dimen.design_tab_scrollable_min_width);
+        mTabTextMultiLineSize = res.getDimensionPixelSize(R.dimen.x_design_tab_text_size_2line);
+        mScrollableTabMinWidth = res.getDimensionPixelSize(R.dimen.x_design_tab_scrollable_min_width);
 
         // Now apply the tab mode and gravity
         applyModeAndGravity();
@@ -1648,13 +1652,13 @@ public class XTabLayout extends HorizontalScrollView {
                 // If there isn't a custom view, we'll us our own in-built layouts
                 if (mIconView == null) {
                     ImageView iconView = (ImageView) LayoutInflater.from(getContext())
-                            .inflate(R.layout.design_layout_tab_icon, this, false);
+                            .inflate(R.layout.layout_tab_icon, this, false);
                     addView(iconView, 0);
                     mIconView = iconView;
                 }
                 if (mTextView == null) {
                     TextView textView = (TextView) LayoutInflater.from(getContext())
-                            .inflate(R.layout.design_layout_tab_text, this, false);
+                            .inflate(R.layout.layout_tab_text, this, false);
                     textView.setPadding(dpToPx(6),0,dpToPx(6),0);
                     addView(textView);
                     mTextView = textView;

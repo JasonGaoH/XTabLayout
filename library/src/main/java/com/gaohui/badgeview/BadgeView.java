@@ -21,7 +21,8 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.TabWidget;
 
-import com.gaohui.xtablayout.R;
+import com.gaohui.android.code.library.R;
+
 
 /**
  * 红点View

@@ -6,7 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.gaohui.xtablayout.R;
+import com.gaohui.android.code.library.R;
 
 
 public class XTabItem extends View {
