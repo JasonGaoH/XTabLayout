@@ -9,6 +9,7 @@
         <attr name="x_tabIndicatorWidth" format="dimension" />
         <attr name="x_tabContentStart" format="dimension" />
         <attr name="x_tabBackground" format="reference" />
+        <attr name="x_tabTextSize" format="dimension" />
         <attr name="x_tabMode">
             <enum name="scrollable" value="0" />
             <enum name="fixed" value="1" />
@@ -19,9 +20,8 @@
         </attr>
         <attr name="x_tabMinWidth" format="dimension" />
         <attr name="x_tabMaxWidth" format="dimension" />
-        <attr name="x_tabTextAppearance" format="reference" />
-        <attr name="x_tabTextColor" format="color" />
         <attr name="x_tabSelectedTextColor" format="color" />
+        <attr name="x_tabUnSelectedTextColor" format="color" />
         <attr name="x_tabPaddingStart" format="dimension" />
         <attr name="x_tabPaddingTop" format="dimension" />
         <attr name="x_tabPaddingEnd" format="dimension" />

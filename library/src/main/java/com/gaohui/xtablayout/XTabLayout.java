@@ -10,6 +10,7 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.database.DataSetObserver;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
@@ -39,7 +40,6 @@ import android.support.v7.widget.TooltipCompat;
 import android.text.Layout;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -82,6 +82,7 @@ public class XTabLayout extends HorizontalScrollView {
     private static final int TAB_MIN_WIDTH_MARGIN = 56; //dps
     static final int FIXED_WRAP_GUTTER_MIN = 16; //dps
     static final int MOTION_NON_ADJACENT_OFFSET = 24;
+    static final int DEFAULT_TAB_SIZE = 14; //dp
 
     private static final int ANIMATION_DURATION = 300;
 
@@ -182,6 +183,8 @@ public class XTabLayout extends HorizontalScrollView {
 
     int mTabTextAppearance;
     ColorStateList mTabTextColors;
+    int mSelectedTabTextColor;
+    int mUnSelectedTabTextColor;
     float mTabTextSize;
     float mTabTextMultiLineSize;
 
@@ -262,33 +265,15 @@ public class XTabLayout extends HorizontalScrollView {
         mTabPaddingBottom = a.getDimensionPixelSize(R.styleable.XTabLayout_x_tabPaddingBottom,
                 mTabPaddingBottom);
 
-        mTabTextAppearance = a.getResourceId(R.styleable.XTabLayout_x_tabTextAppearance,
-                R.style.TextAppearance_Design_Tab);
+        mTabTextSize = a.getDimensionPixelSize(
+                R.styleable.XTabLayout_x_tabTextSize, dpToPx(DEFAULT_TAB_SIZE));
+        mSelectedTabTextColor = a.getColor(
+                R.styleable.XTabLayout_x_tabSelectedTextColor, Color.parseColor("#333333"));
 
-        // Text colors/sizes come from the text appearance first
-        @SuppressLint("CustomViewStyleable") final TypedArray ta = context.obtainStyledAttributes(mTabTextAppearance,
-                android.support.v7.appcompat.R.styleable.TextAppearance);
-        try {
-            mTabTextSize = ta.getDimensionPixelSize(
-                    android.support.v7.appcompat.R.styleable.TextAppearance_android_textSize, 0);
-            mTabTextColors = ta.getColorStateList(
-                    android.support.v7.appcompat.R.styleable.TextAppearance_android_textColor);
-        } finally {
-            ta.recycle();
-        }
+        mUnSelectedTabTextColor = a.getColor(
+                R.styleable.XTabLayout_x_tabUnSelectedTextColor, Color.parseColor("#666666"));
 
-        if (a.hasValue(R.styleable.XTabLayout_x_tabTextColor)) {
-            // If we have an explicit text color set, use it instead
-            mTabTextColors = a.getColorStateList(R.styleable.XTabLayout_x_tabTextColor);
-        }
-
-        if (a.hasValue(R.styleable.XTabLayout_x_tabSelectedTextColor)) {
-            // We have an explicit selected text color set, so we need to make merge it with the
-            // current colors. This is exposed so that developers can use theme attributes to set
-            // this (theme attrs in ColorStateLists are Lollipop+)
-            final int selected = a.getColor(R.styleable.XTabLayout_x_tabSelectedTextColor, 0);
-            mTabTextColors = createColorStateList(mTabTextColors.getDefaultColor(), selected);
-        }
+        mTabTextColors = createColorStateList(mUnSelectedTabTextColor,mSelectedTabTextColor);
 
         mRequestedTabMinWidth = a.getDimensionPixelSize(R.styleable.XTabLayout_x_tabMinWidth,
                 INVALID_WIDTH);

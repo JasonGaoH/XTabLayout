@@ -13,9 +13,8 @@
         <item name="x_tabPaddingStart">12dp</item>
         <item name="x_tabPaddingEnd">12dp</item>
         <item name="x_tabBackground">?attr/selectableItemBackground</item>
-        <item name="x_tabTextAppearance">@style/TextAppearance.Design.Tab</item>
         <item name="x_tabSelectedTextColor">?android:textColorPrimary</item>
-        <item name="x_tabTextColor">?android:textColorSecondary</item>
+        <item name="x_tabUnSelectedTextColor">?android:textColorSecondary</item>
     </style>
 
     <style name="XTabLayout_Default_Style" parent="Base.XTabLayout">
@@ -25,8 +24,8 @@
         <item name="x_tabPaddingStart">12dp</item>
         <item name="x_tabPaddingEnd">12dp</item>
         <item name="x_tabBackground">?attr/selectableItemBackground</item>
-        <item name="x_tabTextAppearance">@style/TextAppearance.Design.Tab</item>
         <item name="x_tabSelectedTextColor">?android:textColorPrimary</item>
+        <item name="x_tabUnSelectedTextColor">?android:textColorSecondary</item>
         <item name="x_tabGravity">fill</item>
         <item name="x_tabMode">fixed</item>
     </style>
