@@ -13,6 +13,7 @@ XTabLayout主要是基于原生TabLayout的改造，最早的需求是想可以�
 XTabLayout | 灵活，定制性高 | 需要修改不少TabLayout的逻辑
 
 可以看下面的截图效果比较：
+
 ![](https://raw.githubusercontent.com/JasonGaoH/XTabLayout/master/gif/tablayout_compare.png)
 
 GIF展示：
