@@ -33,9 +33,9 @@ GIF展示：
 关于
 --
 
-博客：[https://blog.csdn.net/H_Gao](https://blog.csdn.net/H_Gao)
+博客：[https://jasongaoh.github.io](https://jasongaoh.github.io)
 
-邮箱：532294580@qq.com
+邮箱：jasongaohui@gmail.com
 
 License
 --
